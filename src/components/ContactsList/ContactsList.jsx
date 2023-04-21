@@ -1,11 +1,10 @@
 // import PropTypes from 'prop-types';
+import { fetchDelContacts } from 'redux/option';
 import { Box, Btn, ListBox } from './ContactsList.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/AddContactsSlice';
-
 export const ContactsList = () => {
-  const contacts = useSelector(state => state.contacts);
-  const filter = useSelector(state => state.filters);
+  const { items: contacts } = useSelector(state => state.contacts.contacts);
+  const filter = useSelector(state => state.contacts.filters);
   const dispatch = useDispatch();
   const lowCaseFilter = filter.toLowerCase();
 
@@ -14,12 +13,12 @@ export const ContactsList = () => {
   );
   return (
     <ListBox>
-      {visibleContacts.map(({ id, name, number }) => {
+      {visibleContacts.map(({ id, name, phone: number }) => {
         return (
           <Box key={id}>
             <p>{name}:</p>
             <p>{number}</p>
-            <Btn onClick={() => dispatch(deleteContact(id))} type="button">
+            <Btn onClick={() => dispatch(fetchDelContacts(id))} type="button">
               Прощай контакт насовсем
             </Btn>
           </Box>

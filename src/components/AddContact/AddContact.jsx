@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 // import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/AddContactsSlice';
-import { nanoid } from 'nanoid';
+import { fetchAdContacts } from 'redux/option';
 
 export function AddContact() {
   const [name, setName] = useState('');
@@ -12,10 +11,10 @@ export function AddContact() {
     name,
     number,
   };
-  const contacts = useSelector(state => state.contacts);
+  const { items: contacts } = useSelector(state => state.contacts.contacts);
   const dispatch = useDispatch();
 
-  console.log(contacts);
+  // console.log(contacts);
 
   const handleChange = e => {
     switch (e.currentTarget.name) {
@@ -31,23 +30,21 @@ export function AddContact() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    // console.log(dataState);
     onSubmit(dataState);
     reset();
   };
 
   const onSubmit = ({ name, number }) => {
     const newContact = {
-      id: nanoid(),
       name,
-      number,
+      phone: number,
     };
 
     contacts.find(
       ({ name }) => name.toLowerCase() === newContact.name.toLowerCase()
     )
       ? alert('Этот чувак уже есть в книге бро')
-      : dispatch(addContact(newContact));
+      : dispatch(fetchAdContacts(newContact));
   };
 
   const reset = () => {
